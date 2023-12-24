@@ -9,7 +9,21 @@ func main() {
 	app := fiber.New()
 
 	app.Get("/", func(c *fiber.Ctx) error {
-		return c.Redirect("https://vclemenzi.dev", 301)
+		return c.SendString(utils.Cowsay())
+	})
+
+	app.Get("/redirects", func(c *fiber.Ctx) error {
+		body, err := utils.GetRedirects()
+
+		if err != nil {
+			c.Status(500)
+			return c.JSON(fiber.Map{
+				"error": "Idk, actually",
+			})
+		}
+
+		c.Status(200)
+		return c.SendString(body)
 	})
 
 	app.Get("/:redirect", func(c *fiber.Ctx) error {

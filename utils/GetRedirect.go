@@ -35,3 +35,22 @@ func GetRedirect(redirect string) (string, error) {
 
 	return "", nil
 }
+
+func GetRedirects() (string, error) {
+	resp, err := http.Get("https://gist.githubusercontent.com/vclemenzi/9dc86c53e12266d9a91dd33ff35fc755/raw/78c8a32897e24a36843682a82216b9f1342ab5c5/redirects.txt")
+
+	if err != nil {
+		return "", err
+	}
+
+	body, err := io.ReadAll(resp.Body)
+	if err != nil {
+		return "", err
+	}
+
+	bodyString := string(body)
+
+	defer resp.Body.Close()
+
+	return bodyString, nil
+}
